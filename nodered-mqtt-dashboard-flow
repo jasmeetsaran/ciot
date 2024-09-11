@@ -1,0 +1,352 @@
+[
+    {
+        "id": "21d8acaafaa38db8",
+        "type": "tab",
+        "label": "Device Dashboard",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "eb1a50596675b5d0",
+        "type": "ui_gauge",
+        "z": "21d8acaafaa38db8",
+        "name": "Temperature",
+        "group": "02d3befc390faed7",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 710,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "9fc869b0cf5a3069",
+        "type": "ui_chart",
+        "z": "21d8acaafaa38db8",
+        "name": "Humidity",
+        "group": "aa20055c39f09f34",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 700,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "81b5b45fc3bdc8e8",
+        "type": "ui_gauge",
+        "z": "21d8acaafaa38db8",
+        "name": "Pressure",
+        "group": "98c897327fea1e87",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "wave",
+        "title": "",
+        "label": "",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 700,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "631823e5c02f9e59",
+        "type": "ui_text",
+        "z": "21d8acaafaa38db8",
+        "group": "02d3befc390faed7",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Temperature",
+        "format": "{{msg.payload}} &deg;C",
+        "layout": "row-spread",
+        "className": "",
+        "x": 710,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "d26349048f1e0e0f",
+        "type": "ui_text",
+        "z": "21d8acaafaa38db8",
+        "group": "aa20055c39f09f34",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Humidity",
+        "format": "{{msg.payload}} %",
+        "layout": "row-spread",
+        "className": "",
+        "x": 700,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "441208352cc6ee3a",
+        "type": "ui_text",
+        "z": "21d8acaafaa38db8",
+        "group": "98c897327fea1e87",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Pressure",
+        "format": "{{msg.payload}} hPa",
+        "layout": "row-spread",
+        "className": "",
+        "x": 700,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "5bb3dd6269aeea8e",
+        "type": "mqtt in",
+        "z": "21d8acaafaa38db8",
+        "name": "",
+        "topic": "sensor/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cceaed36b7f378a1",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 80,
+        "y": 260,
+        "wires": [
+            [
+                "7a25420f811ac9f0",
+                "c42d67515b077edf",
+                "a4486096aff07eea",
+                "9cbdd0cfae773e28"
+            ]
+        ]
+    },
+    {
+        "id": "7a25420f811ac9f0",
+        "type": "debug",
+        "z": "21d8acaafaa38db8",
+        "name": "Output",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 330,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "c42d67515b077edf",
+        "type": "change",
+        "z": "21d8acaafaa38db8",
+        "name": "Extract Temperature",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.temperature",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 140,
+        "wires": [
+            [
+                "eb1a50596675b5d0",
+                "631823e5c02f9e59"
+            ]
+        ]
+    },
+    {
+        "id": "a4486096aff07eea",
+        "type": "change",
+        "z": "21d8acaafaa38db8",
+        "name": "Extract Humidity",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.humidity",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 240,
+        "wires": [
+            [
+                "9fc869b0cf5a3069",
+                "d26349048f1e0e0f"
+            ]
+        ]
+    },
+    {
+        "id": "9cbdd0cfae773e28",
+        "type": "change",
+        "z": "21d8acaafaa38db8",
+        "name": "Extract Pressure",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.pressure",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 340,
+        "wires": [
+            [
+                "81b5b45fc3bdc8e8",
+                "441208352cc6ee3a"
+            ]
+        ]
+    },
+    {
+        "id": "02d3befc390faed7",
+        "type": "ui_group",
+        "name": "Temperature",
+        "tab": "0914af3f9d20ccf4",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "aa20055c39f09f34",
+        "type": "ui_group",
+        "name": "Humidity",
+        "tab": "0914af3f9d20ccf4",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "98c897327fea1e87",
+        "type": "ui_group",
+        "name": "Pressure",
+        "tab": "0914af3f9d20ccf4",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "cceaed36b7f378a1",
+        "type": "mqtt-broker",
+        "name": "MQTT Broker",
+        "broker": "192.168.3.4",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "0914af3f9d20ccf4",
+        "type": "ui_tab",
+        "name": "Conference Room",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
