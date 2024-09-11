@@ -1,0 +1,239 @@
+[
+    {
+        "id": "fa1f81c4b7d3e70d",
+        "type": "tab",
+        "label": "HTTP to MQTT",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "62fb04bbadd3f49e",
+        "type": "http in",
+        "z": "fa1f81c4b7d3e70d",
+        "name": "[get] /mqtt",
+        "url": "/mqtt",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 120,
+        "wires": [
+            [
+                "053916ae07288dd7",
+                "eb7dda53b89f570d"
+            ]
+        ]
+    },
+    {
+        "id": "88e55f0f5660a336",
+        "type": "mqtt out",
+        "z": "fa1f81c4b7d3e70d",
+        "name": "send extracted mqtt message",
+        "topic": "",
+        "qos": "2",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "181c8571afcfce4b",
+        "x": 730,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "1031c3c97263d4e0",
+        "type": "inject",
+        "z": "fa1f81c4b7d3e70d",
+        "name": "Send http request",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 470,
+        "y": 520,
+        "wires": [
+            [
+                "7e619a1eb10d30a1"
+            ]
+        ]
+    },
+    {
+        "id": "7e619a1eb10d30a1",
+        "type": "http request",
+        "z": "fa1f81c4b7d3e70d",
+        "name": "http://192.168.x.x:1880/mqtt?topic=test_topic&message=test_message",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://192.168.x.x:1880/mqtt?topic=test_topic&message=test_message",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 850,
+        "y": 520,
+        "wires": [
+            [
+                "2498dbafc93be820"
+            ]
+        ]
+    },
+    {
+        "id": "053916ae07288dd7",
+        "type": "change",
+        "z": "fa1f81c4b7d3e70d",
+        "name": "extract topic and message",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.topic",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "payload.message",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 440,
+        "y": 220,
+        "wires": [
+            [
+                "88e55f0f5660a336"
+            ]
+        ]
+    },
+    {
+        "id": "eb7dda53b89f570d",
+        "type": "http response",
+        "z": "fa1f81c4b7d3e70d",
+        "name": "give standard http response",
+        "statusCode": "",
+        "headers": {},
+        "x": 460,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "efa98ec623ee172f",
+        "type": "http in",
+        "z": "fa1f81c4b7d3e70d",
+        "name": "[post] /mqtt",
+        "url": "/mqtt",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 240,
+        "wires": [
+            [
+                "053916ae07288dd7",
+                "eb7dda53b89f570d"
+            ]
+        ]
+    },
+    {
+        "id": "4d8614bae2ec4346",
+        "type": "mqtt in",
+        "z": "fa1f81c4b7d3e70d",
+        "name": "",
+        "topic": "test_topic",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "181c8571afcfce4b",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 440,
+        "y": 580,
+        "wires": [
+            [
+                "2498dbafc93be820"
+            ]
+        ]
+    },
+    {
+        "id": "2498dbafc93be820",
+        "type": "debug",
+        "z": "fa1f81c4b7d3e70d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 660,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "181c8571afcfce4b",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "192.168.x.x",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
+
+get
+-----------------------------------------------------------------
+http://192.168.x.x:1880/mqtt?topic=sensor&message={"temperature":26.5,"humidity":24.5}
+
+
+post
+-----------------------------------------------------------------
+192.168.x.x:1880/mqtt
+
+{
+	"topic": "sensor",
+	"message": {
+		"temperature": 36.5,
+		"humidity": 64.5
+	}
+}
