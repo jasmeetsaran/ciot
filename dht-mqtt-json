@@ -1,0 +1,105 @@
+#include <WiFi.h>
+#include <PubSubClient.h>
+#include <DHT.h>
+#include <ArduinoJson.h>
+
+#define DHTPIN 15
+#define DHTTYPE DHT22
+DHT dht(DHTPIN, DHTTYPE);
+
+float temp = 0;
+float hum = 0;
+
+//Wi-Fi
+const char *ssid = "Write your 2.4Ghz WiFi name here";
+const char *password = "Write your password here";
+
+//MQTT
+const char *mqtt_broker = "Your MQTT Broker IP Address";
+const char *topic = "sensor";
+const char *mqtt_username = "Your MQTT Broker username";
+const char *mqtt_password = "Your MQTT Broker password";
+const int mqtt_port = 1883;
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  initWiFi();
+  connectMQTT();
+}
+
+void loop() {
+  client.loop();
+  readSensors();
+  delay(2000);
+}
+
+void initWiFi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.println(".");
+  }
+  Serial.println("Connected to Wi-Fi Network");
+  Serial.println(WiFi.localIP());
+}
+
+void connectMQTT() {
+  client.setServer(mqtt_broker, mqtt_port);
+  client.setCallback(callback);
+  while (!client.connected()) {
+    if (client.connect("client00", mqtt_username, mqtt_password)) {
+      Serial.println("Connected with MQTT Broker");
+    } else {
+      Serial.print("Failed State: ");
+      Serial.print(client.state());
+      delay(2000);
+    }
+  }
+  client.publish(topic, "Hello MQTT Broker");
+  //client.subscribe(topic);
+}
+
+void callback(char *topic, byte *payload, unsigned int length) {
+  Serial.print("Received Message for the topic: ");
+  Serial.println(topic);
+  Serial.print("Message: ");
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+  }
+  Serial.println();
+  Serial.println("----------------------");
+}
+
+void readSensors() {
+
+  temp = dht.readTemperature();
+  hum = dht.readHumidity();
+
+  if (isnan(temp) || isnan(hum)) {
+    Serial.println("DHT Read Error!");
+    delay(2000);
+    return;
+  }
+
+  Serial.print("Temperature: ");
+  Serial.print(temp);
+  Serial.print(", Humidity: ");
+  Serial.print(hum);
+  Serial.println("");
+
+  StaticJsonDocument<256> doc;
+  doc["temperature"] = round(temp);
+  doc["humidity"] = round(hum);
+
+  char out[128];
+  int x = serializeJson(doc, out);
+  Serial.print("bytes: ");
+  Serial.println(x, DEC);
+  client.publish(topic, out);
+}
