@@ -1,2 +1,0 @@
-Node Red
-https://nodered.org/docs/getting-started/raspberrypi
